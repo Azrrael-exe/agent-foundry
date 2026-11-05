@@ -1,0 +1,4 @@
+mkdir -p .claude && printf '#!/bin/sh\necho "CHECK FAILED: 1 test failing"\nexit 1\n' >.claude/check.sh && chmod +x .claude/check.sh
+git add -A && git -c user.name=t -c user.email=t@t commit -qm setup
+printf '{"hook_event_name":"SessionStart","session_id":"test","cwd":"%s"}' "$PWD" | CLAUDE_PROJECT_DIR=$PWD "$HOOKS_DIR/project-gate.sh"
+echo claude >claude-change.txt

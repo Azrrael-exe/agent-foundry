@@ -1,0 +1,5 @@
+mkdir -p .venv/bin
+printf '#!/bin/sh\nexit 0\n' >.venv/bin/ruff
+chmod +x .venv/bin/ruff
+printf '[tool.ruff]\nline-length = 100\n' >pyproject.toml
+echo "x = 1" >x.py

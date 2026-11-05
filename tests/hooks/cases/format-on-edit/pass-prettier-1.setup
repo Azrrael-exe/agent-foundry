@@ -1,0 +1,4 @@
+mkdir -p node_modules/.bin sub
+printf '#!/bin/sh\necho "$2"\nexit 0\n' >node_modules/.bin/prettier
+chmod +x node_modules/.bin/prettier
+echo "const a = 1" >sub/app.ts

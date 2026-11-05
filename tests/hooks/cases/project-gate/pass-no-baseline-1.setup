@@ -1,0 +1,2 @@
+mkdir -p .claude && printf '#!/bin/sh\nexit 1\n' >.claude/check.sh && chmod +x .claude/check.sh
+echo claude >new.txt

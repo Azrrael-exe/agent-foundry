@@ -1,0 +1,5 @@
+mkdir -p .venv/bin
+printf '#!/bin/sh\nfor a; do [ "$a" = --force-exclude ] && exit 0; done\necho "missing --force-exclude"; exit 1\n' >.venv/bin/ruff
+chmod +x .venv/bin/ruff
+printf '[tool.ruff]\n' >pyproject.toml
+echo "x = 1" >x.py

@@ -1,0 +1,2 @@
+mkdir -p .claude && printf '#!/bin/sh\nexit 1\n' >.claude/check.sh && chmod +x .claude/check.sh
+git add -A && git -c user.name=t -c user.email=t@t commit -qm "add check"

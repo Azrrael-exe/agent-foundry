@@ -1,0 +1,10 @@
+{
+  "session_id": "test",
+  "hook_event_name": "PostToolUse",
+  "cwd": "@@PROJECT@@",
+  "tool_name": "Edit",
+  "tool_input": {
+    "file_path": "/etc/hosts"
+  },
+  "tool_response": {}
+}

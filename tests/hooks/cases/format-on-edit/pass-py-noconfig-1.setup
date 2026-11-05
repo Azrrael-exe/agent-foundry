@@ -1,0 +1,5 @@
+mkdir -p .venv/bin
+printf '#!/bin/sh\necho "ruff must not run without config"; exit 1\n' >.venv/bin/ruff
+chmod +x .venv/bin/ruff
+printf '[project]\nname = "x"\n' >pyproject.toml
+echo "import os" >x.py

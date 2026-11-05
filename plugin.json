@@ -1,0 +1,11 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "agent-foundry",
+  "version": "0.1.0",
+  "description": "Reusable agent workflows and experimental Codex hooks.",
+  "extensions": {
+    "com.openai": {
+      "hooks": "./adapters/codex/hooks.json"
+    }
+  }
+}

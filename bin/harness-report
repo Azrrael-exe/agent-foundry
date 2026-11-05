@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Summarize harness events (blocks and asks) by hook, rule and project.
+# Usage: harness-report [days=7] [-p <project substring>]
+set -u
+days=7 proj=""
+while [ $# -gt 0 ]; do
+  case $1 in
+  -p) proj=${2:-} && shift 2 ;;
+  -h | --help) sed -n '2,3p' "$0" && exit 0 ;;
+  *) days=$1 && shift ;;
+  esac
+done
+if ! [[ $days =~ ^[0-9]+$ ]]; then
+  echo "harness-report: days must be a whole number (got '$days')" >&2
+  exit 1
+fi
+log="${HARNESS_HOME:-$HOME/.claude/harness}/events.jsonl"
+if [ ! -s "$log" ]; then
+  echo "No harness events recorded yet."
+  exit 0
+fi
+
+# Malformed lines are skipped rather than failing the whole report.
+jq -nrR --argjson days "$days" --arg proj "$proj" '
+  def pad: tostring | (" " * (5 - length)) + .;
+  def section(title; key):
+    "\n" + title,
+    (group_by(key) | map({k: (.[0] | key), n: length}) | sort_by(-.n, .k) | .[]
+     | "\(.n | pad)  \(.k)");
+  (now - $days * 86400) as $since
+  | [inputs | fromjson? // empty
+     | select((.ts | fromdateiso8601? // 0) >= $since)
+     | select($proj == "" or ((.project // "") | contains($proj)))] as $ev
+  | "Harness events, last \($days) days (since \($since | todate | .[:10]))"
+    + (if $proj != "" then ", project matching \"\($proj)\"" else "" end),
+    if ($ev | length) == 0 then "No events in this period."
+    else
+      ([$ev[] | .session | select(. != null and . != "")] | unique | length) as $s
+      | "Total: \($ev | length) (\([$ev[] | select(.decision == "block")] | length) block, \([$ev[] | select(.decision == "ask")] | length) ask)"
+        + (if $s > 0 then " in \($s) sessions (\(($ev | length) / $s * 10 | round / 10) per session)" else "" end),
+        ($ev | section("By hook"; .hook)),
+        ($ev | section("By rule"; "\(.hook)/\(.rule)")),
+        ($ev | section("By project"; .project))
+    end
+' "$log"

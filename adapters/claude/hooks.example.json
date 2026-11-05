@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "SessionStart": [{"hooks": [{"type": "command", "command": "\"$AGENT_FOUNDRY_ROOT/hooks/project-gate.sh\"", "timeout": 30}]}],
+    "Stop": [{"hooks": [{"type": "command", "command": "\"$AGENT_FOUNDRY_ROOT/hooks/project-gate.sh\"", "timeout": 600}]}],
+    "PreToolUse": [
+      {"matcher": "Bash", "hooks": [{"type": "command", "command": "\"$AGENT_FOUNDRY_ROOT/hooks/guard-bash.sh\"", "timeout": 5}]},
+      {"matcher": "Bash|Read|Edit|Write", "hooks": [{"type": "command", "command": "\"$AGENT_FOUNDRY_ROOT/hooks/guard-secrets.sh\"", "timeout": 5}]}
+    ],
+    "PostToolUse": [{"matcher": "Edit|Write", "hooks": [{"type": "command", "command": "\"$AGENT_FOUNDRY_ROOT/hooks/format-on-edit.sh\"", "timeout": 30}]}]
+  }
+}

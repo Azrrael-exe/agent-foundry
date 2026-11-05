@@ -1,0 +1,9 @@
+{
+  "session_id": "test",
+  "hook_event_name": "PreToolUse",
+  "cwd": "@@PROJECT@@",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "chmod 777 run.sh"
+  }
+}

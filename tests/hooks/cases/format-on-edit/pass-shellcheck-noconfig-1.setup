@@ -1,0 +1,1 @@
+printf '#!/usr/bin/env bash\ncd build\necho "in build"\n' >bad.sh

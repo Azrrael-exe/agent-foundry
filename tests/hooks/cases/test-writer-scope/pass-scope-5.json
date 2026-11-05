@@ -1,0 +1,10 @@
+{
+  "session_id": "test",
+  "hook_event_name": "PreToolUse",
+  "cwd": "@@PROJECT@@",
+  "tool_name": "Write",
+  "tool_input": {
+    "file_path": "@@PROJECT@@/tests/test_new.py",
+    "content": "x"
+  }
+}

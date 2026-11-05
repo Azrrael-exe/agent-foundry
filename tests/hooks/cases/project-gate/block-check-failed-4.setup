@@ -1,0 +1,9 @@
+export PATH="$PWD/.fakebin:$PATH"
+mkdir -p .fakebin
+printf '#!/bin/sh\ncase $1 in --summary) echo "build check" ;; check) echo "just: recipe check failed"; exit 1 ;; esac\n' >.fakebin/just
+chmod +x .fakebin/just
+printf "check:\n\tfalse\n" >justfile
+printf 'check:\n\t@true\n' >Makefile
+git add -A && git -c user.name=t -c user.email=t@t commit -qm setup
+printf '{"hook_event_name":"SessionStart","session_id":"test","cwd":"%s"}' "$PWD" | CLAUDE_PROJECT_DIR=$PWD "$HOOKS_DIR/project-gate.sh"
+echo claude >claude-change.txt

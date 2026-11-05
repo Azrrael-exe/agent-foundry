@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Install only this checkout's shared skills. Existing user configuration and
+# foreign skills are never overwritten, merged, or removed.
+ROOT=$(cd "$(dirname "$0")/.." && pwd -P)
+
+usage() {
+  cat <<'EOF'
+Usage: foundry skills install|uninstall claude|codex|antigravity
+       foundry doctor
+
+Only skills are installed. Hooks, agent instructions, trust lists, permissions,
+and MCP servers are not configured by this command.
+EOF
+}
+
+skills_dir() {
+  case $1 in
+    claude) printf '%s\n' "$HOME/.claude/skills" ;;
+    codex) printf '%s\n' "$HOME/.agents/skills" ;;
+    antigravity) printf '%s\n' "$HOME/.gemini/config/skills" ;;
+    *) printf 'Unknown platform: %s\n' "$1" >&2; return 2 ;;
+  esac
+}
+
+is_owned_link() {
+  [ -L "$1" ] && [ "$(readlink "$1")" = "$2" ]
+}
+
+install_skills() {
+  local dest=$1 src name target
+  # Preflight all names before creating anything, including the parent folder.
+  for src in "$ROOT"/skills/*; do
+    [ -f "$src/SKILL.md" ] || continue
+    name=${src##*/}
+    target=$dest/$name
+    if [ -e "$target" ] || [ -L "$target" ]; then
+      if ! is_owned_link "$target" "$src"; then
+        printf 'Conflict: %s already exists; nothing was installed.\n' "$target" >&2
+        return 1
+      fi
+    fi
+  done
+  mkdir -p "$dest"
+  for src in "$ROOT"/skills/*; do
+    [ -f "$src/SKILL.md" ] || continue
+    name=${src##*/}
+    target=$dest/$name
+    if is_owned_link "$target" "$src"; then
+      printf 'Already installed: %s\n' "$target"
+    else
+      # ln fails instead of replacing an entry created after preflight.
+      ln -s "$src" "$target"
+      printf 'Installed: %s\n' "$target"
+    fi
+  done
+  printf 'Skills only: hooks, instructions, permissions, and trust are unchanged.\n'
+}
+
+uninstall_skills() {
+  local dest=$1 src name target
+  for src in "$ROOT"/skills/*; do
+    [ -f "$src/SKILL.md" ] || continue
+    name=${src##*/}
+    target=$dest/$name
+    if is_owned_link "$target" "$src"; then
+      rm -- "$target"
+      printf 'Removed: %s\n' "$target"
+    elif [ -e "$target" ] || [ -L "$target" ]; then
+      printf 'Preserved foreign entry: %s\n' "$target"
+    fi
+  done
+}
+
+doctor() {
+  local cmd platform dest src installed total
+  printf 'Agent Foundry checkout: %s\n' "$ROOT"
+  for cmd in bash git jq shasum awk; do
+    if command -v "$cmd" >/dev/null 2>&1; then
+      printf 'Dependency %-8s available\n' "$cmd"
+    else
+      printf 'Dependency %-8s MISSING\n' "$cmd"
+    fi
+  done
+  for platform in claude codex antigravity; do
+    dest=$(skills_dir "$platform")
+    installed=0 total=0
+    for src in "$ROOT"/skills/*; do
+      [ -f "$src/SKILL.md" ] || continue
+      total=$((total + 1))
+      if is_owned_link "$dest/${src##*/}" "$src"; then installed=$((installed + 1)); fi
+    done
+    printf '%-12s skills: %s/%s linked to this checkout\n' "$platform" "$installed" "$total"
+  done
+  printf '%s\n' 'Hooks, instructions, permissions, trust, and live agent integration: not checked.'
+}
+
+case ${1:-} in
+  skills)
+    [ "$#" -eq 3 ] || { usage >&2; exit 2; }
+    dest=$(skills_dir "$3")
+    case $2 in
+      install) install_skills "$dest" ;;
+      uninstall) uninstall_skills "$dest" ;;
+      *) usage >&2; exit 2 ;;
+    esac
+    ;;
+  doctor)
+    [ "$#" -eq 1 ] || { usage >&2; exit 2; }
+    doctor
+    ;;
+  -h|--help|help) usage ;;
+  *) usage >&2; exit 2 ;;
+esac

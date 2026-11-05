@@ -1,0 +1,5 @@
+mkdir -p .venv/bin sub
+printf '#!/bin/sh\n[ "$1" = format ] && { echo "error: Failed to parse sub/y.py:1:5"; exit 2; }\nexit 0\n' >.venv/bin/ruff
+chmod +x .venv/bin/ruff
+printf 'line-length = 100\n' >ruff.toml
+echo "def (" >sub/y.py

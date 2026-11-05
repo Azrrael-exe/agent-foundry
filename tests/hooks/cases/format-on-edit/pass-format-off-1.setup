@@ -1,0 +1,5 @@
+printf '[tool.ruff]\n' >pyproject.toml
+mkdir -p .venv/bin
+printf '#!/bin/sh\n[ "$1" = check ] && { echo "x.py:1:8: F401 [*] os imported but unused"; exit 1; }\nexit 0\n' >.venv/bin/ruff
+chmod +x .venv/bin/ruff
+echo "import os" >x.py

@@ -1,0 +1,4 @@
+mkdir -p .fakebin
+printf '#!/bin/sh\necho "main.go:1:1: expected '"'"'package'"'"', found '"'"'func'"'"'"; exit 2\n' >.fakebin/gofmt
+chmod +x .fakebin/gofmt
+echo "func main() {}" >main.go

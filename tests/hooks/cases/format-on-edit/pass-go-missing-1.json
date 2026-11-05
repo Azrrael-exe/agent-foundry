@@ -1,0 +1,10 @@
+{
+  "session_id": "test",
+  "hook_event_name": "PostToolUse",
+  "cwd": "@@PROJECT@@",
+  "tool_name": "Edit",
+  "tool_input": {
+    "file_path": "@@PROJECT@@/main.go"
+  },
+  "tool_response": {}
+}

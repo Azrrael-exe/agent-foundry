@@ -1,0 +1,1 @@
+echo "const a = 1" >app.ts

@@ -1,0 +1,5 @@
+hook() { printf '{"hook_event_name":"%s","session_id":"test","cwd":"%s"}' "$1" "$PWD" | CLAUDE_PROJECT_DIR=$PWD "$HOOKS_DIR/project-gate.sh" >/dev/null; }
+mkdir -p .claude && printf '#!/bin/sh\necho formatted >>generated.txt\necho LINT FAILED\nexit 1\n' >.claude/check.sh && chmod +x .claude/check.sh
+hook SessionStart
+echo claude >new.txt
+hook Stop

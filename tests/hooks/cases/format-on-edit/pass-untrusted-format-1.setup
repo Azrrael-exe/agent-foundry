@@ -1,0 +1,5 @@
+mkdir -p .venv/bin
+printf '#!/bin/sh\necho "repo-local ruff must not run when untrusted"; exit 1\n' >.venv/bin/ruff
+chmod +x .venv/bin/ruff
+printf '[tool.ruff]\n' >pyproject.toml
+echo "x = 1" >x.py

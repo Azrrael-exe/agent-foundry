@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# headersHelper for the GitHub MCP server: print the auth header as JSON.
+# Token source: macOS Keychain item "github-mcp" (a PAT you store), else
+# `gh auth token`. No secret lives in this file or in ~/.claude.json.
+t=$(security find-generic-password -s github-mcp -w 2>/dev/null)
+[ -n "$t" ] || t=$(gh auth token 2>/dev/null)
+if [ -z "$t" ]; then
+  echo "github-mcp-headers: no token; store one in Keychain (service github-mcp) or run gh auth login" >&2
+  exit 1
+fi
+jq -nc --arg t "$t" '{Authorization: ("Bearer " + $t)}'

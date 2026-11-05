@@ -1,0 +1,1 @@
+printf 'check := $(shell echo x)\nall:\n\t@false\n' >Makefile

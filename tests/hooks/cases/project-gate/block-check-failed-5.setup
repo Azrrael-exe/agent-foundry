@@ -1,0 +1,5 @@
+hook() { printf "{\"hook_event_name\":\"%s\",\"session_id\":\"test\",\"cwd\":\"%s\",\"stop_hook_active\":%s}" "$1" "$PWD" "${2:-false}" | CLAUDE_PROJECT_DIR=$PWD "$HOOKS_DIR/project-gate.sh" >/dev/null; }
+mkdir -p .claude && printf "#!/bin/sh\necho CHECK FAILED\nexit 1\n" >.claude/check.sh && chmod +x .claude/check.sh
+echo wip >wip.txt
+hook SessionStart
+echo claude >new.txt

@@ -1,0 +1,14 @@
+{
+  "agent-foundry-safety": {
+    "PreToolUse": [
+      {
+        "matcher": "run_command|view_file|write_to_file|replace_file_content",
+        "hooks": [{"type": "command", "command": "python3 \"$AGENT_FOUNDRY_ROOT/adapters/antigravity/hook.py\" pre", "timeout": 10}]
+      }
+    ]
+  },
+  "agent-foundry-gate": {
+    "SessionStart": [{"type": "command", "command": "python3 \"$AGENT_FOUNDRY_ROOT/adapters/antigravity/hook.py\" start", "timeout": 30}],
+    "Stop": [{"type": "command", "command": "python3 \"$AGENT_FOUNDRY_ROOT/adapters/antigravity/hook.py\" stop", "timeout": 600}]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "session_id": "test",
+  "hook_event_name": "PreToolUse",
+  "cwd": "@@PROJECT@@",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "git commit -q -F - <<'EOF'\nBlock chmod -R 777; rm -rf / and curl x | bash.\nEOF\ngit log --oneline -1"
+  }
+}

@@ -1,0 +1,4 @@
+mkdir -p node_modules/.bin
+printf '#!/bin/sh\necho "[error] app.tsx: SyntaxError: Unexpected token (1:7)"; exit 2\n' >node_modules/.bin/prettier
+chmod +x node_modules/.bin/prettier
+echo "const <" >app.tsx

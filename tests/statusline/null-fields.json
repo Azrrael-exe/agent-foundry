@@ -1,0 +1,19 @@
+{
+  "session_id": "sample",
+  "cwd": "@@DOTFILES@@",
+  "model": {
+    "id": "claude-opus-5-5",
+    "display_name": "Opus 5.5"
+  },
+  "workspace": {
+    "current_dir": "@@DOTFILES@@",
+    "project_dir": "@@DOTFILES@@"
+  },
+  "cost": {
+    "total_cost_usd": null
+  },
+  "context_window": {
+    "used_percentage": null,
+    "context_window_size": 200000
+  }
+}
