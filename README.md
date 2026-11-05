@@ -25,15 +25,15 @@ must be granted explicitly.
 
 ## Testing
 
-On macOS with Bash, Git, jq, Python 3, Perl, and standard Unix tools:
+On macOS with Bash, Git, jq, Python 3, Perl, ShellCheck, and standard Unix tools:
 
 ```sh
 tests/run.sh
 ```
 
-The hook suite uses ShellCheck when available. Formatter fixtures use shims;
-they do not prove integration with real formatters. Tests do not install hooks
-or modify existing agent configurations.
+The hook suite includes a real ShellCheck fixture; several other formatter
+fixtures use shims and do not prove integration with real formatters. Tests do
+not install hooks or modify existing agent configurations.
 
 ## Components
 

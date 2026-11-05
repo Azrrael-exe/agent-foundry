@@ -8,5 +8,9 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install ShellCheck for hook tests
+        run: |
+          brew install shellcheck
+          command -v shellcheck
       - name: Run test suites
         run: tests/run.sh
