@@ -23,6 +23,102 @@ The core discovers checks in order: `.harness/check.sh`, `.claude/check.sh`,
 trusted Git project. Check and formatter commands are repository code, so trust
 must be granted explicitly.
 
+## Spec-driven workflow
+
+Ask your coding agent to use `spec-builder` when you want a request defined
+before implementation. The same workflow can describe a new project, feature,
+fix, or refactor. These are suggested handoffs, not automatically invoked
+agents or steps; availability depends on your agent environment.
+
+```mermaid
+flowchart TD
+    A[Request] --> B{Scenario}
+    B -->|New project: set up harness| C[harness-bootstrap skill]
+    C --> D[spec-builder skill]
+    B -->|Feature| D
+    B -->|Fix requiring a spec| D
+    B -->|Refactor requiring a spec| D
+    D --> E[Review and approve spec and path]
+    E --> F[Save spec and hand off]
+    F -. If available .-> G[acceptance-test-writer agent]
+    F --> I[Implementation and verification]
+    I -. If available .-> H[scope-auditor agent]
+```
+
+### What happens when a spec is created
+
+1. The agent reads the request, relevant code and existing specs. If the project
+   uses OpenSpec, it offers to use the project's OpenSpec change format.
+2. It asks only questions the repository cannot answer, one at a time, until
+   the acceptance criteria are testable.
+3. It presents a draft with the goal, context, scope, exclusions, acceptance
+   criteria, constraints, open questions and verification. Criteria have stable
+   IDs and describe observable outcomes.
+4. It proposes a path, normally `specs/<yyyy-mm-dd>-<slug>.md` or the project's
+   existing spec location. The user approves both the draft and path before the
+   file is written.
+5. It hands off the approved spec. Implementation and verification happen
+   separately; the optional agents below can help turn criteria into tests and
+   review the finished work against the spec.
+
+### Examples
+
+The prompts below are messages to your coding agent after installing the skills;
+they are not shell commands. Adapt the examples to your project.
+
+**New project**
+
+> Use `harness-bootstrap` to set up this new robot project, then use
+> `spec-builder` to define its first feature: moving forward on command.
+
+The bootstrap skill inventories the repository and proposes project
+instructions and checks in phases, requesting approval before each next phase.
+The spec can then define, for example: **AC-1:** Given the robot is stationary
+and its path is clear, when it receives a forward command, then it moves forward.
+Verification should describe how to test that behavior.
+
+**Feature**
+
+> Use `spec-builder` to specify obstacle detection for the robot, including
+> how it reacts to an obstacle while moving. Do not implement it yet.
+
+The draft defines scope and exclusions and can include: **AC-1:** Given the
+robot is moving forward, when its sensor detects an obstacle within the agreed
+stopping distance, then the robot stops before reaching the obstacle.
+
+**Fix**
+
+> Use `spec-builder` to specify a fix for the robot continuing to move after
+> receiving a stop command. Include reproduction steps and a regression criterion.
+
+The agent investigates the reported behavior and clarifies any missing
+conditions. A criterion can state: **AC-1:** Given the robot is moving, when it
+receives a stop command, then it stops within the agreed response time. The
+verification section identifies a regression test or manual reproduction.
+
+**Refactor**
+
+> Use `spec-builder` to specify extracting motor control from the robot's command
+> handler while preserving forward movement and stop behavior.
+
+The draft sets the intended boundary, explicitly excludes behavior changes and
+defines how existing behavior will be checked. For example: **AC-1:** Given the
+robot is moving forward, when it receives a stop command, then its motors stop
+within the existing response time.
+
+## Agents
+
+| Participant | Role in this workflow |
+|---|---|
+| [`harness-bootstrap`](skills/harness-bootstrap/SKILL.md) | A skill for setting up or auditing a repository's agent harness. It inventories the project, then proposes instructions, checks and applicable architecture sensors in approval-based phases. Use it when a project needs harness setup. |
+| [`spec-builder`](skills/spec-builder/SKILL.md) | A skill that guides the coding agent through clarifying and drafting a testable spec. It asks for approval before saving the draft and does not implement the change. |
+| `acceptance-test-writer` | An optional agent suggested by `spec-builder`, if available, to turn acceptance criteria into tests. It is not included in this repository. |
+| `scope-auditor` | An optional agent suggested by `spec-builder`, if available, to review completed work against the approved spec. It is not included in this repository. |
+
+The coding agent performs implementation and verification as a separate step.
+Installing the skills links their instructions; it does not install the optional
+agents or guarantee that any agent is invoked automatically.
+
 ## Testing
 
 On macOS with Bash, Git, jq, Python 3, Perl, ShellCheck, and standard Unix tools:
