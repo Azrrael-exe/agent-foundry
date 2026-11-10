@@ -47,10 +47,14 @@ Propose mechanical checks for boundaries the repo actually has, added to the che
 - Or a dependency-free rule, e.g. `! rg -n 'from app.db' app/api/` inside check.sh.
 Ask before adding any new dependency.
 
-## Phase 5: OpenSpec (optional)
+## Phase 5: Spec workflow (optional)
 
-Offer OpenSpec integration for spec-driven changes. Look up its current setup in the official
-docs first (use `docs-researcher` if available). Install nothing without approval.
+First identify the project's existing spec convention and preserve it. Offer a lightweight
+workflow using `spec-builder` as an option: agree when specs are useful, where they live, and
+how acceptance criteria, implementation, verification, and current documentation stay linked.
+Do not require specs for every change or add instructions without the user's approval.
+OpenSpec is another option; look up its current setup in the official docs first (use
+`docs-researcher` if available). Install nothing without approval.
 
 ## Phase 6: Close
 

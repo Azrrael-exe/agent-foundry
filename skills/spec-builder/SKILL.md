@@ -19,8 +19,11 @@ Do not implement anything while using this skill.
 3. **Draft the spec** with the template below and show it in the conversation.
 4. **Propose the location**: `specs/<yyyy-mm-dd>-<slug>.md`, or wherever the project keeps specs.
    Write the file only after the user approves the draft and the path.
-5. **Hand off.** Suggest next steps: `acceptance-test-writer` to turn the ACs into tests, and
-   `scope-auditor` against this spec once the work is done (if those agents are available).
+5. **Hand off.** Identify the approved spec as the implementation reference. Map each AC to
+   automated or manual verification, identify affected current docs and unresolved decisions,
+   and suggest updating them with the change. Report passed, failed, and unrun checks when
+   implementation is verified; a green project check alone may not cover every AC. Suggest
+   `acceptance-test-writer` and `scope-auditor` only if available; neither is required.
 
 ## Template
 
@@ -50,11 +53,15 @@ Performance, compatibility, security, dependencies allowed or not.
 - ... (anything still ambiguous; each becomes a skipped test until answered)
 
 ## Verification
-Commands that prove the ACs (test command, manual check).
+For each AC, identify an automated test or a manual check and any prerequisites.
 ```
 
 ## Rules
 
-- Every AC must be verifiable by a test or a command. Rewrite vague ones ("fast", "nice").
+- Every AC must be verifiable by an automated test or a concrete manual check. Rewrite vague
+  ones ("fast", "nice").
 - AC IDs are stable: never renumber; mark dropped ones as `~~AC-3~~ (dropped: reason)`.
 - Unresolved ambiguity goes to Open questions, not into a guessed AC.
+- The spec records change decisions; maintain the project's current documentation separately.
+  Record verification results in the spec when useful or required by the project, including
+  checks that could not be run. Do not claim an AC was verified without evidence.
