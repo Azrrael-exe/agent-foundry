@@ -112,43 +112,173 @@ defines how existing behavior will be checked. For example: **AC-1:** Given the
 robot is moving forward, when it receives a stop command, then its motors stop
 within the existing response time.
 
+## Delivery workflow: from a demo to production
+
+Use [`delivery-workflow`](skills/delivery-workflow/SKILL.md) when you want the
+coding agent to carry an approved spec through implementation and verification,
+preserve technical decisions, and continue the same initiative across sessions
+and deliveries. It can coordinate a new product, a feature in an existing product,
+or an isolated prototype. A demo is an initial delivery that can evolve.
+
+The skill extends the spec-driven development (SDD) workflow above. `spec-builder`
+still defines the requirements and hands off before implementation;
+`delivery-workflow` coordinates what happens next. Existing SDD handoffs and
+project conventions, including OpenSpec, remain available.
+
+### Choose the work, maturity, and execution mode
+
+These choices are independent and are recorded in the work agreement:
+
+| Choice | Options | Example |
+| --- | --- | --- |
+| Work type | Product, feature, prototype | A booking feature reusing the current catalog |
+| Current and target maturity | Exploration, demo, pilot, production | An exploration becomes a client demo, then a ten-user pilot |
+| Execution mode | Staged, continuous | Complete one agreed increment, or continue through the approved scope |
+
+In **staged mode**, the agent completes the agreed increment and reports its
+result. In **continuous mode**, it implements, verifies, repairs, and documents
+successive increments within the approved scope. It reuses existing authorization
+and consults you when a material decision falls outside it. Choosing a demo or
+continuous mode does not grant additional permissions.
+
+### How an initiative moves through the workflow
+
+Purple is the shared SDD foundation, blue is the staged path, orange is continuous
+execution and evolution, and green is a delivered version.
+
+```mermaid
+flowchart TD
+    A[Request and existing context] --> B[Spec and work agreement]
+    B --> C[Approve scope and execution boundaries]
+    C --> D{Execution mode}
+    D -->|Staged| E[Implement the agreed increment]
+    D -->|Continuous| F[Implement approved increments]
+    E --> G[Verify and update the technical record]
+    F --> G
+    G --> H{Result}
+    H -->|Repair within scope and same mode| D
+    H -->|Decision outside scope| B
+    H -->|Required criteria satisfied| I[Deliver version and evidence]
+    H -->|Blocker or exhausted budget| J[Save checkpoint and report next action]
+    I --> K[Feedback or maturity gap analysis]
+    K --> B
+    classDef shared fill:#EDE9FE,stroke:#7C3AED,color:#3B0764
+    classDef staged fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A
+    classDef continuous fill:#FFEDD5,stroke:#EA580C,color:#7C2D12
+    classDef delivered fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    class A,B,C,D,G,H shared
+    class E staged
+    class F,J,K continuous
+    class I delivered
+```
+
+1. **Understand and agree.** Read the repository and any previous initiative
+   record. Define the observable result, acceptance criteria, allowed simulations,
+   protected components, and delivery conditions. Resolve material questions and
+   record approval of the spec and execution boundaries before implementation.
+2. **Plan reuse.** Identify components to reuse, extend, or create, with reasons
+   and references. Define compatibility checks for protected contracts and
+   preserve unrelated work. A branch or worktree alone does not prove compatibility.
+3. **Implement and maintain the record.** Work in verifiable increments. Update
+   consequential decisions, current technical documentation, evidence, and the
+   checkpoint alongside the implementation. Correct in-scope failures; revisit
+   the agreement before changes that exceed authorization.
+4. **Deliver against evidence.** Report each criterion as passed, failed, or
+   unverified, with its evidence and code reference. Include run or presentation
+   instructions, simulations, limitations, and remaining work. Mandatory failed
+   or unverified criteria keep the delivery incomplete.
+
+Checks follow the active adapter's trust rules. If a blocker prevents progress,
+the agent preserves a checkpoint and explains what is needed to continue. Unless
+an explicit budget overrides it, two consecutive repair attempts for the same
+failure without new evidence or measurable progress stop further repairs of that
+failure. Independent authorized work may continue.
+
+### What the agent keeps for the next iteration
+
+The record separates the intended result, decision history, and current technical
+state so another session can continue without reconstructing the original chat.
+
+| Artifact | What it preserves |
+| --- | --- |
+| Spec and agreement | Requirements, stable criterion IDs, scope, approval, maturity, and execution limits |
+| Decision journal | Technical choices, context, consequences, and links between replaced and current decisions |
+| Current implementation documentation | Components, contracts, dependencies, data flow, run instructions, and real versus simulated integrations |
+| Reuse plan | Existing components and callers, allowed changes, protected contracts, and compatibility checks |
+| Verification record | Results tied to a code reference, evidence, skipped checks, and limitations |
+| Current checkpoint | Completed, pending, or uncertain work; blockers; retry state; and the next authorized action |
+
+Reuse the project's existing specs, ADRs, and technical docs. Where no convention
+exists, the skill suggests `docs/initiatives/<initiative-id>/` for the initiative
+record while keeping specs in the project's spec location. Small initiatives can
+combine sections in a few files. Templates are optional starting structures;
+the journal records consequential decisions rather than every action.
+
+### Start, resume, iterate, and raise maturity
+
+After installing the skills, send these as messages to your coding agent.
+
+**Prepare a demo and its agreement**
+
+> Use delivery-workflow to prepare a booking demo using our existing authentication
+> and catalog. Use simulated availability and separate demo data. Propose the spec
+> and execution agreement before implementation, including protected contracts.
+
+**Authorize continuous execution after reviewing the proposal**
+
+> Execute the approved booking spec continuously within its agreed limits. Keep
+> the decision journal and current technical docs, verify the acceptance criteria,
+> and deliver a locally runnable demo with presentation instructions.
+
+**Resume an interrupted implementation**
+
+> Resume the booking initiative from its checkpoint. Reconcile the record with
+> current repository changes, preserve unrelated edits, and continue authorized work.
+
+Resumption checks what actually happened before replaying an operation with an
+unknown outcome. Relevant changes make prior evidence stale until reassessed;
+completed work is not blindly repeated, and retry counts persist across sessions.
+
+**Improve a presented demo**
+
+> Turn this client feedback into the next booking increment. Classify defects,
+> new requirements, and changed requirements; propose the updated scope and keep
+> the prior delivery and criterion history identifiable.
+
+**Plan a move to pilot or production**
+
+> Evaluate moving the booking demo to a ten-user pilot with real availability.
+> Identify what to retain, strengthen, replace, or retire, and propose the new
+> criteria and verification plan. Keep unresolved target requirements explicit.
+
+A transition plan reviews simulations, shortcuts, and operational needs against
+the actual target context. It does not itself upgrade the initiative's maturity:
+approved target criteria need supporting evidence. A demo may satisfy its own
+spec while still requiring substantial work for production.
+
+This version consists of portable skill instructions and Markdown templates.
+The coding agent follows the process; there is no executable orchestrator or
+background runner. Installation does not activate agents or hooks, grant trust,
+or authorize publishing. Live provider integration and automated recovery remain
+unverified. See the [detailed guide and eight change specs](docs/delivery-workflow.md)
+and [manual validation scenarios](tests/delivery-workflow/scenarios.md).
+
 ## Agents
 
 | Participant | Role in this workflow |
 |---|---|
 | [`harness-bootstrap`](skills/harness-bootstrap/SKILL.md) | A skill for setting up or auditing a repository's agent harness. It inventories the project, then proposes instructions, checks and applicable architecture sensors in approval-based phases. Use it when a project needs harness setup. |
 | [`spec-builder`](skills/spec-builder/SKILL.md) | A skill that guides the coding agent through clarifying and drafting a testable spec. It asks for approval before saving the draft and does not implement the change. |
+| [`delivery-workflow`](skills/delivery-workflow/SKILL.md) | A skill that coordinates approved implementation, technical records, evidence, resumption, iterations, and maturity transition planning. |
 | [`acceptance-test-writer`](agents/acceptance-test-writer.md) | An optional agent definition for turning acceptance criteria into tests. |
 | [`scope-auditor`](agents/scope-auditor.md) | An optional agent definition for reviewing completed work against its intent. |
 
-The coding agent performs implementation and verification as a separate step.
-Installing the skills links their instructions; it does not install the optional
-agents or guarantee that any agent is invoked automatically. The included agent
-definitions use Claude-specific tools and hooks and require a compatible setup;
-the workflow also works without them.
-
-### Continuing from a spec to delivery
-
-Use [`delivery-workflow`](skills/delivery-workflow/SKILL.md) to coordinate an
-approved spec through implementation, verification, and a durable implementation
-journal. It supports products, features, and prototypes, with exploration, demo,
-pilot, or production as separate maturity targets. Choose staged execution or
-continuous execution within an explicitly authorized scope.
-
-The workflow plans reuse of existing components and protected contracts, records
-technical decisions and current implementation details, and ties delivery claims
-to acceptance evidence. It also guides resumption, feedback-driven iterations, and
-planning a demo's transition toward production. Existing SDD and OpenSpec workflows
-remain available; spec-builder still hands off before implementation.
-
-> Use delivery-workflow to prepare a booking demo using our existing authentication
-> and catalog. Propose the spec and execution agreement, keep a decision journal,
-> and identify which integrations will be simulated.
-
-This is a skill with instructions and Markdown templates, not an executable
-orchestrator, automatic agent installer, or security control. It does not grant
-repository trust or publication permissions. See the
-[workflow guide](docs/delivery-workflow.md) for the lifecycle and continuation examples.
+The coding agent performs implementation and verification after specification,
+optionally coordinated by `delivery-workflow`. One agent can perform the whole
+workflow; multiple agents are used only when authorized and available. Installing
+the skills links their instructions; it does not install the optional agents or
+guarantee their invocation. The included agent definitions use Claude-specific
+tools and hooks and require a compatible setup; the workflow also works without them.
 
 ## Testing
 
