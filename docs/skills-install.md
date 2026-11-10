@@ -25,3 +25,8 @@ move it, uninstall the links from the old location before moving the checkout,
 then install them again. Agent software may need a restart or a skills reload.
 Consult the relevant agent's documentation for discovery behavior and surface
 support. A link's presence alone does not prove the agent loaded the skill.
+
+The optional `delivery-workflow` skill is included in the same discovery and
+linking process. Its directory contains the workflow references and Markdown
+templates used for agreements, journals, verification, and continuation. It adds
+no executable runner or agents. See [the workflow guide](delivery-workflow.md).

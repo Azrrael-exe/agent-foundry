@@ -127,6 +127,29 @@ agents or guarantee that any agent is invoked automatically. The included agent
 definitions use Claude-specific tools and hooks and require a compatible setup;
 the workflow also works without them.
 
+### Continuing from a spec to delivery
+
+Use [`delivery-workflow`](skills/delivery-workflow/SKILL.md) to coordinate an
+approved spec through implementation, verification, and a durable implementation
+journal. It supports products, features, and prototypes, with exploration, demo,
+pilot, or production as separate maturity targets. Choose staged execution or
+continuous execution within an explicitly authorized scope.
+
+The workflow plans reuse of existing components and protected contracts, records
+technical decisions and current implementation details, and ties delivery claims
+to acceptance evidence. It also guides resumption, feedback-driven iterations, and
+planning a demo's transition toward production. Existing SDD and OpenSpec workflows
+remain available; spec-builder still hands off before implementation.
+
+> Use delivery-workflow to prepare a booking demo using our existing authentication
+> and catalog. Propose the spec and execution agreement, keep a decision journal,
+> and identify which integrations will be simulated.
+
+This is a skill with instructions and Markdown templates, not an executable
+orchestrator, automatic agent installer, or security control. It does not grant
+repository trust or publication permissions. See the
+[workflow guide](docs/delivery-workflow.md) for the lifecycle and continuation examples.
+
 ## Testing
 
 On macOS with Bash, Git, jq, Python 3, Perl, ShellCheck, and standard Unix tools:
