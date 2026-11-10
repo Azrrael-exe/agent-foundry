@@ -214,42 +214,125 @@ record while keeping specs in the project's spec location. Small initiatives can
 combine sections in a few files. Templates are optional starting structures;
 the journal records consequential decisions rather than every action.
 
-### Start, resume, iterate, and raise maturity
+### Scenarios and example prompts
 
-After installing the skills, send these as messages to your coding agent.
+After [installing the skills](docs/skills-install.md), send these as messages to
+your coding agent, not as shell commands. Replace the example initiative, paths,
+and requirements with your own. For an existing initiative, point the agent to
+its spec and record so it can recover decisions and authorization.
 
-**Prepare a demo and its agreement**
+| Scenario | When to use it | Expected result |
+| --- | --- | --- |
+| New product demo | Validate a product idea through a complete user journey | An agreed spec, runnable demo, technical record, and presentation instructions |
+| Feature in an existing product | Demonstrate new behavior using current components | An extension with explicit modification boundaries and compatibility evidence |
+| Isolated prototype | Compare approaches before committing to a product design | A bounded experiment, findings, and a record of reusable versus temporary work |
+| Direct production target | The intended real use is known and a demo phase is unnecessary | A spec with product-specific operational criteria and verified implementation increments |
+| Resume interrupted work | Continue the same approved scope in another session | A reconciled checkpoint and the next authorized action |
+| Iterate after feedback | Improve a version already shown to users or a client | A new increment linked to feedback, prior requirements, and delivery history |
+| Demo to pilot | Replace selected simulations for limited real use | A gap assessment and proposed criteria for the pilot |
+| Pilot to production | Prepare for broader use and ongoing operation | A transition plan grounded in target requirements and remaining evidence gaps |
 
-> Use delivery-workflow to prepare a booking demo using our existing authentication
-> and catalog. Use simulated availability and separate demo data. Propose the spec
-> and execution agreement before implementation, including protected contracts.
+**1. New product: demonstrate a complete journey**
 
-**Authorize continuous execution after reviewing the proposal**
+> Use delivery-workflow to prepare a demo of a service-booking product. A customer
+> should choose a service, select a slot, book it, and see the saved reservation
+> after reloading. Use sample services and simulated availability. Target a local
+> client presentation; exclude payments and deployment. Propose the spec and work
+> agreement before implementation, then keep technical decisions and limitations
+> with the initiative.
 
-> Execute the approved booking spec continuously within its agreed limits. Keep
-> the decision journal and current technical docs, verify the acceptance criteria,
-> and deliver a locally runnable demo with presentation instructions.
+The proposal should distinguish the real reservation behavior from simulated
+availability and define evidence for the whole presentation journey.
 
-**Resume an interrupted implementation**
+**2. Existing product: reuse without changing protected contracts**
 
-> Resume the booking initiative from its checkpoint. Reconcile the record with
-> current repository changes, preserve unrelated edits, and continue authorized work.
+> Use delivery-workflow to add a booking demo to this product. Reuse authentication,
+> the service catalog, and existing UI components. Preserve the authentication and
+> catalog contracts. Allow new booking screens and endpoints with separate demo
+> data. Propose the scope, component reuse plan, and compatibility checks before
+> implementation. Consult me if the feature requires changing a protected contract.
+
+The plan should identify existing callers and how their behavior will be checked;
+the delivery should report actual compatibility evidence and any unverified gaps.
+
+**3. Isolated prototype: test a design question**
+
+> Use delivery-workflow for an isolated prototype comparing a calendar view with
+> a list of available slots. Use synthetic data and the existing design components
+> where practical. Keep the experiment separate from the main booking journey.
+> Propose a bounded comparison plan and record the findings, design decisions,
+> and work that would need replacement before a real integration.
+
+The result is evidence for a design decision. The prototype does not become a
+production implementation merely because the demonstration works.
+
+**4. Direct production target: define real-use requirements up front**
+
+> Use delivery-workflow to plan a production booking feature in this product.
+> Reuse existing identity and persistence conventions. Define criteria for booking
+> conflicts, access control, error handling, and operation in our target environment.
+> Identify missing requirements before approving the spec. Propose staged delivery
+> so I can review each agreed increment; treat deployment as a separate decision.
+
+The agent should resolve the requirements relevant to this product rather than
+substitute a universal readiness checklist. Production remains the target until
+the approved criteria have supporting evidence.
+
+**Choose how to execute an approved proposal**
+
+For continuous execution:
+
+> I approve this spec, its proposed path, and the work agreement. Execute the
+> approved scope continuously within those limits. Keep the journal and current
+> technical docs, verify the criteria, and deliver the agreed local result.
+
+For a staged increment:
+
+> I approve this spec and its proposed path. Implement only the first increment
+> in the agreement, verify its criteria, update the technical record, and stop
+> with the result and proposed next increment.
+
+Either message applies only to the proposal being reviewed. Existing clear
+authorization is reused; it is not necessary to repeat it for each file or step.
+
+**5. Resume the same unfinished scope**
+
+> Use delivery-workflow to resume the booking initiative from its existing spec
+> and checkpoint. Compare the record with the current repository, preserve my
+> unrelated edits, and continue the remaining authorized work. Reassess evidence
+> affected by changes since the checkpoint before claiming completion.
 
 Resumption checks what actually happened before replaying an operation with an
-unknown outcome. Relevant changes make prior evidence stale until reassessed;
-completed work is not blindly repeated, and retry counts persist across sessions.
+unknown outcome. Completed work is not blindly repeated, and retry counts persist
+across sessions. This differs from starting a new increment after delivery.
 
-**Improve a presented demo**
+**6. Iterate after a client presentation**
 
-> Turn this client feedback into the next booking increment. Classify defects,
-> new requirements, and changed requirements; propose the updated scope and keep
-> the prior delivery and criterion history identifiable.
+> Use delivery-workflow to prepare the next increment from booking demo v1.
+> Feedback: reservations disappear after reloading, customers want cancellation,
+> and slots should now be shown in the customer's timezone. Compare this with the
+> delivered spec, classify defects and new or changed requirements, and propose
+> the updated scope. Preserve v1's evidence and criterion history.
 
-**Plan a move to pilot or production**
+If persistence was already required, its failure is a defect; cancellation may
+be a new requirement, and timezone behavior depends on the prior specification.
+The agent investigates the feedback rather than assuming every item is new scope.
 
-> Evaluate moving the booking demo to a ten-user pilot with real availability.
-> Identify what to retain, strengthen, replace, or retire, and propose the new
-> criteria and verification plan. Keep unresolved target requirements explicit.
+**7. Move a demo to a limited pilot**
+
+> Use delivery-workflow to evaluate moving the booking demo to a ten-employee
+> pilot with real availability. Keep authentication unchanged. Assess the simulated
+> provider and demo storage; propose what to retain, strengthen, replace, or retire.
+> Identify unresolved usage and data requirements. Prepare the transition plan
+> and acceptance criteria only; do not implement or deploy the pilot yet.
+
+**8. Move a pilot toward production**
+
+> Use delivery-workflow to plan the booking pilot's production transition. Review
+> pilot findings, remaining shortcuts, and technical decisions against our intended
+> users and operating environment. Propose measurable criteria for the relevant
+> reliability, access, data recovery, and observability needs. Ask for missing targets
+> rather than inventing them, and sequence the work for review before implementation.
 
 A transition plan reviews simulations, shortcuts, and operational needs against
 the actual target context. It does not itself upgrade the initiative's maturity:
