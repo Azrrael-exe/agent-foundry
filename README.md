@@ -30,6 +30,10 @@ before implementation. The same workflow can describe a new project, feature,
 fix, or refactor. These are suggested handoffs, not automatically invoked
 agents or steps; availability depends on your agent environment.
 
+For Agent Foundry's own development, [project instructions](AGENTS.md) define when a
+spec is needed and how to complete the change. Other repositories choose whether to
+adopt a spec workflow and can retain their existing conventions, including OpenSpec.
+
 ```mermaid
 flowchart TD
     A[Request] --> B{Scenario}
@@ -57,9 +61,11 @@ flowchart TD
 4. It proposes a path, normally `specs/<yyyy-mm-dd>-<slug>.md` or the project's
    existing spec location. The user approves both the draft and path before the
    file is written.
-5. It hands off the approved spec. Implementation and verification happen
-   separately; the optional agents below can help turn criteria into tests and
-   review the finished work against the spec.
+5. It hands off the approved spec as the reference for implementation. Map each
+   criterion to automated or manual verification, update affected current docs,
+   and report passed, failed, and unrun checks. A green project check does not by
+   itself prove every criterion. Record results in the spec when useful or required.
+   Implementation happens separately; optional agents can help with tests and review.
 
 ### Examples
 
@@ -112,12 +118,14 @@ within the existing response time.
 |---|---|
 | [`harness-bootstrap`](skills/harness-bootstrap/SKILL.md) | A skill for setting up or auditing a repository's agent harness. It inventories the project, then proposes instructions, checks and applicable architecture sensors in approval-based phases. Use it when a project needs harness setup. |
 | [`spec-builder`](skills/spec-builder/SKILL.md) | A skill that guides the coding agent through clarifying and drafting a testable spec. It asks for approval before saving the draft and does not implement the change. |
-| `acceptance-test-writer` | An optional agent suggested by `spec-builder`, if available, to turn acceptance criteria into tests. It is not included in this repository. |
-| `scope-auditor` | An optional agent suggested by `spec-builder`, if available, to review completed work against the approved spec. It is not included in this repository. |
+| [`acceptance-test-writer`](agents/acceptance-test-writer.md) | An optional agent definition for turning acceptance criteria into tests. |
+| [`scope-auditor`](agents/scope-auditor.md) | An optional agent definition for reviewing completed work against its intent. |
 
 The coding agent performs implementation and verification as a separate step.
 Installing the skills links their instructions; it does not install the optional
-agents or guarantee that any agent is invoked automatically.
+agents or guarantee that any agent is invoked automatically. The included agent
+definitions use Claude-specific tools and hooks and require a compatible setup;
+the workflow also works without them.
 
 ## Testing
 
